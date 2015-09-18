@@ -1,24 +1,12 @@
 var React = require('react');
-var Store = require('./Store.js');
-var actions = require('./actions.js');
 
 var App = React.createClass({
   getInitialState: function () {
     return {
-      messages: Store.getMessages(),
-      newMessage: ''
+      todos: [{
+          title: "Bake cake"
+      }]
     };
-  },
-  componentWillMount: function () {
-    Store.addChangeListener(this.changeState);
-  },
-  componentWillUnmount: function () {
-    Store.removeChangeListener(this.changeState);
-  },
-  changeState: function () {
-    this.setState({
-      messages: Store.getMessages()
-    });
   },
   addMessage: function (event) {
     event.preventDefault();
@@ -39,16 +27,16 @@ var App = React.createClass({
     );
   },
 	render: function() {
+    var todos = this.state.todos.map(function(todo){
+      return <li>{todo.title}</li>
+    });
 		return (
 			<div>
-        {this.state.messages.map(this.renderMessages)}
-        <form onSubmit={this.addMessage}>
-          <input ref="newMessage" type="text" value={this.state.newMessage} onChange={this.updateNewMessage}/>
-        </form>
+        {todos}
       </div>
 		);
 	}
-	
+
 });
-	
+
 module.exports = App;

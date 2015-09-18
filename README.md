@@ -7,3 +7,4 @@ Get started:
 - Run `gulp`
 - Run `python -m SimpleHTTPServer` in the build directory
 
+Based on [Flux React Boilerplate](https://github.com/christianalfoni/flux-react-boilerplate).
