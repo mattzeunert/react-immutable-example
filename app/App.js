@@ -1,5 +1,44 @@
 var React = require('react');
 
+var TodoItem = React.createClass({
+  // shouldComponentUpdate: function(newProps){
+  //   return this.renderedJson !== JSON.stringify(newProps);
+  // },
+  render: function(){
+    this.renderedJson = JSON.stringify(this.props);
+    logRender("TodoItem " + this.props.todo.title);
+    return <li>{this.props.todo.title}</li>
+  }
+})
+
+var TodoList = React.createClass({
+  render: function(){
+    logRender("TodoList");
+    var todos = this.props.todos.map(function(todo){
+      return <TodoItem todo={todo}/>
+    });
+    return <ul>
+      {{todos}}
+    </ul>
+  }
+})
+
+var renderLog = [];
+function logRender(componentName){
+  if (componentName){
+    renderLog.unshift("Render: " + componentName);
+  } else {
+    renderLog.unshift("<hr>")
+  }
+  renderLog = renderLog.slice(0, 10);
+  var html = "<hr>" + renderLog.join("<br>");
+  var div = document.getElementById("render-log");
+  if (!div){
+    return;
+  }
+  div.innerHTML = html;
+}
+
 var App = React.createClass({
   getInitialState: function () {
     return {
@@ -27,12 +66,11 @@ var App = React.createClass({
     );
   },
 	render: function() {
-    var todos = this.state.todos.map(function(todo){
-      return <li>{todo.title}</li>
-    });
+    logRender(null);;
+    logRender("App");
 		return (
 			<div>
-        {todos}
+        <TodoList todos={this.state.todos}/>
         <form onSubmit={(e) => this.onSubmit(e)}>
           <input type="text" ref="input"/>
         </form>
@@ -47,7 +85,7 @@ var App = React.createClass({
 
     var todos = this.state.todos;
     todos.push({title: todoTitle})
-    this.setState(this.state); // We're mutating the original todos list, so we just need to tell react that the state has changed.
+    this.setState(this.state); // We're mutating the original todos list, so we just need to tell React that the state has changed.
   }
 });
 
