@@ -2,9 +2,17 @@ var React = require("react");
 var Immutable = require("immutable")
 
 var TodoItem = React.createClass({
+  shouldComponentUpdate: function(nextProps){
+    var checkbox = document.getElementById("use-should-component-update");
+    if (!checkbox.checked) {
+      return true;
+    }
+    // Can use PureRenderMixin to make this easier
+    return nextProps.todo !== this.props.todo;
+  },
   render: function(){
     this.renderedJson = JSON.stringify(this.props);
-    logRender("TodoItem " + this.props.todo.title);
+    logRender("TodoItem " + this.props.todo.get("title"));
     return <li onClick={() => this.onClick()}>{this.props.todo.get("title")}</li>
   },
   onClick: function(){
