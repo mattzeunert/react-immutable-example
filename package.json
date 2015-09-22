@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "flux-react": "^2.6.6",
+    "immutable": "^3.7.5",
     "react": "^0.13.3"
   }
 }

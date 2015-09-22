@@ -1,21 +1,22 @@
-var React = require('react');
+var React = require("react");
+var Immutable = require("immutable")
 
 var TodoItem = React.createClass({
-  // shouldComponentUpdate: function(newProps){
-  //   return this.renderedJson !== JSON.stringify(newProps);
-  // },
   render: function(){
     this.renderedJson = JSON.stringify(this.props);
     logRender("TodoItem " + this.props.todo.title);
-    return <li>{this.props.todo.title}</li>
+    return <li onClick={() => this.onClick()}>{this.props.todo.title}</li>
+  },
+  onClick: function(){
+    todoStore.addExclamationMark(this.props.index)
   }
 })
 
 var TodoList = React.createClass({
   render: function(){
     logRender("TodoList");
-    var todos = this.props.todos.map(function(todo){
-      return <TodoItem todo={todo}/>
+    var todos = this.props.todos.map(function(todo, i){
+      return <TodoItem todo={todo} index={i} />
     });
     return <ul>
       {{todos}}
@@ -30,7 +31,7 @@ function logRender(componentName){
   } else {
     renderLog.unshift("<hr>")
   }
-  renderLog = renderLog.slice(0, 10);
+  renderLog = renderLog.slice(0, 12);
   var html = "<hr>" + renderLog.join("<br>");
   var div = document.getElementById("render-log");
   if (!div){
@@ -39,13 +40,31 @@ function logRender(componentName){
   div.innerHTML = html;
 }
 
+// A very primitive store
+var todoStore = {
+  todos: [
+    {
+      title: "Bake cake"
+    }
+  ],
+  addTodo: function(title){
+    this.todos.push({title: title});
+    this.onChange();
+  },
+  addExclamationMark: function(index){
+
+    this.todos[index].title += "!";
+    this.onChange();
+  },
+  onChange: function(){}
+}
+
 var App = React.createClass({
   getInitialState: function () {
-    return {
-      todos: [{
-          title: "Bake cake"
-      }]
-    };
+    return {todos: todoStore.todos};
+  },
+  componentWillMount: function(){
+    todoStore.onChange = () => this.setState({todos: todoStore.todos});
   },
   addMessage: function (event) {
     event.preventDefault();
@@ -83,9 +102,7 @@ var App = React.createClass({
     var todoTitle = input.value;
     input.value = "";
 
-    var todos = this.state.todos;
-    todos.push({title: todoTitle})
-    this.setState(this.state); // We're mutating the original todos list, so we just need to tell React that the state has changed.
+    todoStore.addTodo(todoTitle);
   }
 });
 
