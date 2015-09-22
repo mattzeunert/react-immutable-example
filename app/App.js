@@ -5,7 +5,7 @@ var TodoItem = React.createClass({
   render: function(){
     this.renderedJson = JSON.stringify(this.props);
     logRender("TodoItem " + this.props.todo.title);
-    return <li onClick={() => this.onClick()}>{this.props.todo.title}</li>
+    return <li onClick={() => this.onClick()}>{this.props.todo.get("title")}</li>
   },
   onClick: function(){
     todoStore.addExclamationMark(this.props.index)
@@ -42,18 +42,20 @@ function logRender(componentName){
 
 // A very primitive store
 var todoStore = {
-  todos: [
+  todos: Immutable.fromJS([
     {
       title: "Bake cake"
     }
-  ],
+  ]),
   addTodo: function(title){
-    this.todos.push({title: title});
+    var newTodo = Immutable.fromJS({title: title});
+    this.todos = this.todos.push(newTodo);
     this.onChange();
   },
   addExclamationMark: function(index){
-
-    this.todos[index].title += "!";
+    this.todos = this.todos.updateIn([index], function(todo){
+      return todo.set("title", todo.get("title") + "!");
+    });
     this.onChange();
   },
   onChange: function(){}
