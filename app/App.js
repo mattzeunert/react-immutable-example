@@ -1,6 +1,47 @@
 var React = require("react");
 var Immutable = require("immutable")
 
+var renderLog = [];
+function logRender(componentName){
+  if (componentName){
+    renderLog.unshift("Render: " + componentName);
+  } else {
+    renderLog.unshift("<hr>")
+  }
+  renderLog = renderLog.slice(0, 20);
+
+  var displayedRenderLog = renderLog.slice();
+  displayedRenderLog.pop();
+  var html = displayedRenderLog.join("<br>");
+  var div = document.getElementById("render-log");
+  if (!div){
+    return;
+  }
+  div.innerHTML = html;
+}
+
+// A very primitive store
+var todoStore = {
+  todos: Immutable.fromJS([
+    {
+      title: "Bake cake"
+    }
+  ]),
+  addTodo: function(title){
+    var newTodo = Immutable.fromJS({title: title});
+    this.todos = this.todos.push(newTodo);
+    this.onChange();
+  },
+  addExclamationMark: function(index){
+    this.todos = this.todos.updateIn([index], function(todo){
+      return todo.set("title", todo.get("title") + "!");
+    });
+    this.onChange();
+  },
+  onChange: function(){}
+}
+
+
 var TodoItem = React.createClass({
   shouldComponentUpdate: function(nextProps){
     var checkbox = document.getElementById("use-should-component-update");
@@ -31,46 +72,6 @@ var TodoList = React.createClass({
     </ul>
   }
 })
-
-var renderLog = [];
-function logRender(componentName){
-  if (componentName){
-    renderLog.unshift("Render: " + componentName);
-  } else {
-    renderLog.unshift("<hr>")
-  }
-
-  var displayedRenderLog = renderLog.slice(0, 20);
-  displayedRenderLog.pop();
-  displayedRenderLog.shift();
-  var html = displayedRenderLog.join("<br>");
-  var div = document.getElementById("render-log");
-  if (!div){
-    return;
-  }
-  div.innerHTML = html;
-}
-
-// A very primitive store
-var todoStore = {
-  todos: Immutable.fromJS([
-    {
-      title: "Bake cake"
-    }
-  ]),
-  addTodo: function(title){
-    var newTodo = Immutable.fromJS({title: title});
-    this.todos = this.todos.push(newTodo);
-    this.onChange();
-  },
-  addExclamationMark: function(index){
-    this.todos = this.todos.updateIn([index], function(todo){
-      return todo.set("title", todo.get("title") + "!");
-    });
-    this.onChange();
-  },
-  onChange: function(){}
-}
 
 var App = React.createClass({
   getInitialState: function () {
