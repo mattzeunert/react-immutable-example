@@ -35,11 +35,11 @@ var TodoList = React.createClass({
 var renderLog = [];
 function logRender(componentName){
   if (componentName){
-    renderLog.unshift("Render: " + componentName);
+    renderLog.unshift("&nbsp;&nbsp;Render: " + componentName);
   } else {
     renderLog.unshift("<hr>")
   }
-  renderLog = renderLog.slice(0, 12);
+  renderLog = renderLog.slice(0, 20);
   var html = "<hr>" + renderLog.join("<br>");
   var div = document.getElementById("render-log");
   if (!div){
@@ -99,6 +99,7 @@ var App = React.createClass({
     logRender("App");
 		return (
 			<div>
+        <h2>Todos</h2>
         <TodoList todos={this.state.todos}/>
         <form onSubmit={(e) => this.onSubmit(e)}>
           <input type="text" ref="input"/>

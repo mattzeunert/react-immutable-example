@@ -1,3 +1,23 @@
 body {
-	background-color: #EAEAEA;
+	background-color: white;
+  padding-top: 20px;
+  font-family: Arial;
+}
+label {
+  display: block;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+#render-log {
+  background: #eee;
+      border-left: 1px solid #aaa;
+    border-right: 1px solid #aaa;
+}
+.container {
+  max-width: 960px;
+  margin: auto;
+}
+
+li {
+  cursor: pointer;
 }
