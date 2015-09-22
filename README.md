@@ -2,6 +2,8 @@
 
 This application demonstrates how React always does a full re-render by default, and how you can change that behavior using `shouldComponentUpdate` and [Immutable.js](https://facebook.github.io/immutable-js/).
 
+The application code is in [the App.js file](https://github.com/mattzeunert/react-immutable-example/blob/master/app/App.js).
+
 Get started:
 - Run `npm install`
 - Run `gulp`
