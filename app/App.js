@@ -35,12 +35,15 @@ var TodoList = React.createClass({
 var renderLog = [];
 function logRender(componentName){
   if (componentName){
-    renderLog.unshift("&nbsp;&nbsp;Render: " + componentName);
+    renderLog.unshift("Render: " + componentName);
   } else {
     renderLog.unshift("<hr>")
   }
-  renderLog = renderLog.slice(0, 20);
-  var html = "<hr>" + renderLog.join("<br>");
+
+  var displayedRenderLog = renderLog.slice(0, 20);
+  displayedRenderLog.pop();
+  displayedRenderLog.shift();
+  var html = displayedRenderLog.join("<br>");
   var div = document.getElementById("render-log");
   if (!div){
     return;
